@@ -3,7 +3,7 @@
 var state
 
 var mouseEventList = ['click', 'resize', 'scroll', 'mousemove']
-var inputEventList = ['input', 'change', 'blur', 'focus']
+var inputEventList = ['input', 'change', 'blur', 'focus', 'onsearch']
 onInit()
 function onInit() {
   state = getState()
@@ -44,19 +44,12 @@ function addEvents() {
 
 function onMouseEvent(ev) {
   if (ev.target.nodeName === 'INPUT') return
-
-  // console.log(state.width, ev)
   if (
     ev.type === 'mousemove' &&
     ev.clientX > state.width - 10 &&
     ev.clientY > state.height - 100
   ) {
     _setEventToState(ev, 'leave')
-    // let action = createMouseEvent(ev)
-    // const type = 'leave'
-    // let actions = state.userMouseActions[type] || []
-    // userMouseActions[type] = [...actions.splice(-3), action]
-    // state = { ...state, userMouseActions }
     return
   }
 
