@@ -1,0 +1,12 @@
+.canvas-container {
+  display: flex;
+  width: 90vw;
+  margin-top: 3rem;
+  padding: 1rem 2rem;
+}
+#canvas {
+  margin: 0 auto;
+  /* border: 1px solid black; */
+
+  box-shadow: -3px 1px 15px 10px #cccaca;
+}
