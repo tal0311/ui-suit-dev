@@ -4,31 +4,56 @@ window.init = init
 import { canvasService } from './services/canvas.service.js'
 var gElCanvas
 var gCtx
-
+var state
 function init() {
-  console.log('init')
   gElCanvas = document.querySelector('canvas')
-  console.log(gElCanvas.width)
+
   gCtx = gElCanvas.getContext('2d')
   setEvents()
   renderGrid()
+  state = canvasService.getState()
+  console.log('state:', state)
+
+  renderSate()
 }
 function onTextChange({ target }) {
   canvasService.setTxt(target.value)
   renderLine()
 }
 
+function renderSate() {
+  const { width, height, route } = state
+  const props = {
+    width,
+    height,
+    route,
+  }
+
+  let y = 20
+  var lineIdx = 0
+  for (var prop in props) {
+    var txt = props[prop]
+    y += 20
+    lineIdx++
+    canvasService.getNewLine(`${prop}: ${txt}`, y + 250, y + 200)
+    renderLine()
+  }
+}
+
 function renderLine() {
-  clearTxt()
-  const { txt, x, y, textAlign, color, font, fontSize } =
-    canvasService.getTextForDisplay()
-  if (!txt) return
-  gCtx.font = fontSize + ' ' + font
-  gCtx.textAlign = textAlign
-  gCtx.fillStyle = color
-  const { fontAscent, fontDecent, width } = getLineMeasures(txt)
-  gCtx.fillText(txt, x, y)
-  setRectToTxt(x, y, fontAscent, fontDecent, width)
+  // clearTxt()
+  let lines = canvasService.geLinesForDisplay()
+  lines.forEach((line) => {
+    const { x, y, textAlign, color, font, txt, fontSize } = line
+
+    if (!txt) return
+    gCtx.font = fontSize + ' ' + font
+    gCtx.textAlign = textAlign
+    gCtx.fillStyle = color
+    // const { fontAscent, fontDecent, width } = getLineMeasures(txt)
+    gCtx.fillText(txt, x, y)
+    // setRectToTxt(x, y, fontAscent, fontDecent, width)
+  })
 }
 
 function setEvents() {
@@ -66,9 +91,8 @@ function onCanvasClick(ev) {
   gCtx.stroke()
 }
 function setRectToTxt(x, y, fontAscent, fontDecent, width) {
-  console.log(x, y, fontAscent, fontDecent, width)
   const line = canvasService.getTextForDisplay()
-  console.log(line)
+
   gCtx.beginPath()
   gCtx.strokeStyle = '#8edb7873'
   gCtx.strokeRect(x, y, width, fontAscent + fontDecent)
@@ -80,11 +104,10 @@ function clearTxt() {
 
 function renderGrid() {
   let startFrom = 0
-  console.log(gElCanvas)
+
   for (let i = 0; i < gElCanvas.width / 100; i++) {
     startFrom = i * 100
 
-    console.log(startFrom)
     gCtx.beginPath()
     gCtx.strokeStyle = '#c0c0c0'
     gCtx.moveTo(startFrom, 0)
@@ -95,7 +118,6 @@ function renderGrid() {
   for (let i = 0; i < gElCanvas.height / 100; i++) {
     startFrom = i * 100
 
-    console.log(startFrom, gElCanvas.height)
     gCtx.beginPath()
     gCtx.moveTo(0, startFrom)
     gCtx.lineTo(gElCanvas.width, startFrom)

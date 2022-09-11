@@ -14,10 +14,24 @@ var model = {
     rightClickColor: '#8edb7873',
     leftClickColor: '#f7a8a8',
   },
+
+  state: {
+    height: document.activeElement.clientHeight,
+    width: document.activeElement.clientWidth,
+    route: window.location.pathname,
+    visitUrlTimeStamp: Date.now(),
+    qParams: window.location.search,
+    userMouseActions: {},
+    userInputActions: {},
+  },
 }
 
-function getTextForDisplay() {
-  return model.lines[0]
+function getState() {
+  return model.state
+}
+
+function geLinesForDisplay() {
+  return model.lines
 }
 
 function setTxt(value) {
@@ -28,19 +42,36 @@ function setTxt(value) {
 function getClickProps() {
   return model.pointerMarker
 }
-function _getEmptyLine(text, x, y, textAlign, color, font) {
+
+function getNewLine(txt, x, y, textAlign, color, font, fontSize) {
+  const line = _getEmptyLine(txt, x, y, textAlign, color, font, fontSize)
+  model.lines.push(line)
+  console.log(model.lines)
+}
+function _getEmptyLine(
+  txt,
+  x,
+  y,
+  textAlign = 'center',
+  color = 'clack',
+  font = 'ariel',
+  fontSize = '24px'
+) {
   return {
-    text,
+    txt,
     x,
     y,
     textAlign,
     color,
     font,
+    fontSize,
   }
 }
 
 export const canvasService = {
   setTxt,
-  getTextForDisplay,
+  geLinesForDisplay,
   getClickProps,
+  getState,
+  getNewLine,
 }
