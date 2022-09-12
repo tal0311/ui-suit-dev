@@ -23,8 +23,9 @@ function onTextChange({ target }) {
 
 function renderSate() {
   renderLines()
-  renderEvents()
-  // renderGrid()
+  renderInputEvents()
+  renderMouseEvents()
+  renderGrid()
 }
 
 function renderLines() {
@@ -69,6 +70,61 @@ function getLineMeasures(txt) {
   }
 }
 
+function renderInputEvents() {
+  const { userInputActions } = state
+  const props = userInputActions
+  const pos = { x: 100, y: gElCanvas.height - 50 }
+  for (const key in props) {
+    gCtx.font = '24px ariel'
+    gCtx.textAlign = 'center'
+    gCtx.fillStyle = '#c0c0c0'
+    gCtx.fillText(`${key}: ${props[key]}`, pos.x, pos.y)
+    pos.x += 200
+  }
+}
+
+function renderMouseEvents() {
+  const { userMouseActions } = state
+  for (const event in userMouseActions) {
+    const events = userMouseActions[event]
+    const color = setColor(event)
+
+    console.log(events)
+    events.forEach((event) => {
+      console.log(event)
+      const { clientX, clientY } = event
+      renderLabel(event)
+      gCtx.beginPath()
+      gCtx.strokeStyle = color
+      gCtx.arc(clientX, clientY, 5, 0, 2 * Math.PI)
+
+      gCtx.stroke()
+    })
+  }
+}
+
+function renderLabel({ target, timeStamp, clientX, clientY }) {
+  console.log(target, timeStamp, clientX, clientY)
+  gCtx.beginPath()
+  gCtx.font = '10px ariel'
+  gCtx.textAlign = 'center'
+  gCtx.fillStyle = '#c0c0c0'
+  gCtx.fillText(
+    `${target} ${new Date(timeStamp).toLocaleTimeString()}`,
+    clientX,
+    clientY - 20
+  )
+}
+
+function setColor(event) {
+  const colorOpt = {
+    click: 'red' || '#db93f7',
+    contextmenu: '#93f7e0',
+    leave: '#f793f5',
+    default: '#f7e593',
+  }
+  return colorOpt[event] || colorOpt.default
+}
 function onCanvasClick(ev) {
   const { offsetX, offsetY } = ev
   console.log(offsetX, offsetY)

@@ -46,9 +46,10 @@ function onMouseEvent(ev) {
   if (ev?.target?.nodeName === 'INPUT') return
   if (
     ev.type === 'mousemove' &&
-    ev.clientX > state.width - 10 &&
-    ev.clientY > state.height - 100
+    ev.clientX > state.width - 50 &&
+    ev.clientY < 100
   ) {
+    console.log('leave')
     _setEventToState(ev, 'leave')
     return
   }
