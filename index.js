@@ -2,7 +2,7 @@
 
 var state
 
-var mouseEventList = ['click', 'resize', 'scroll', 'mousemove']
+var mouseEventList = ['click', 'resize', 'scroll', 'mousemove', 'contextmenu']
 var inputEventList = ['input', 'change', 'blur', 'focus', 'onsearch']
 onInit()
 function onInit() {
@@ -43,7 +43,7 @@ function addEvents() {
 }
 
 function onMouseEvent(ev) {
-  if (ev.target.nodeName === 'INPUT') return
+  if (ev?.target?.nodeName === 'INPUT') return
   if (
     ev.type === 'mousemove' &&
     ev.clientX > state.width - 10 &&
@@ -55,6 +55,12 @@ function onMouseEvent(ev) {
 
   if (ev.type === 'click') {
     _setEventToState(ev)
+    return
+  }
+  if (ev.type === 'contextmenu') {
+    _setEventToState(ev, ev.type)
+    console.log(state)
+    return
   }
 }
 
@@ -65,6 +71,9 @@ function _setEventToState(ev, type = ev.type) {
 
   switch (type) {
     case 'click':
+      userMouseActions[type] = [...actions, action]
+      break
+    case 'contextmenu':
       userMouseActions[type] = [...actions, action]
       break
     case 'leave':
@@ -91,3 +100,7 @@ function createMouseEvent(ev) {
     clientY: ev.clientY,
   }
 }
+// function clickMe(ev) {
+//   ev.preventDefault()
+//   console.log('click me')
+// }

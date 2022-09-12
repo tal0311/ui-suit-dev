@@ -9,8 +9,8 @@ function init() {
   gElCanvas = document.querySelector('canvas')
 
   gCtx = gElCanvas.getContext('2d')
-  setEvents()
-  renderGrid()
+  // setEvents()
+  // renderGrid()
   state = canvasService.getState()
   console.log('state:', state)
 
@@ -18,42 +18,34 @@ function init() {
 }
 function onTextChange({ target }) {
   canvasService.setTxt(target.value)
-  renderLine()
+  // renderLine()
 }
 
 function renderSate() {
-  const { width, height, route } = state
+  renderLines()
+  renderEvents()
+  // renderGrid()
+}
+
+function renderLines() {
+  // clearTxt()
+  const { width, height, route, qParams } = state
   const props = {
     width,
     height,
     route,
+    qParams,
   }
 
-  let y = 20
-  var lineIdx = 0
-  for (var prop in props) {
-    var txt = props[prop]
-    y += 20
-    lineIdx++
-    canvasService.getNewLine(`${prop}: ${txt}`, y + 250, y + 200)
-    renderLine()
+  var pos = { x: 100, y: 100 }
+  for (const key in props) {
+    gCtx.font = '24px ariel'
+    gCtx.textAlign = 'center'
+    gCtx.fillStyle = '#c0c0c0'
+    gCtx.fillText(`${key}: ${props[key]}`, pos.x, pos.y)
+    pos.y += 50
+    pos.x += 50
   }
-}
-
-function renderLine() {
-  // clearTxt()
-  let lines = canvasService.geLinesForDisplay()
-  lines.forEach((line) => {
-    const { x, y, textAlign, color, font, txt, fontSize } = line
-
-    if (!txt) return
-    gCtx.font = fontSize + ' ' + font
-    gCtx.textAlign = textAlign
-    gCtx.fillStyle = color
-    // const { fontAscent, fontDecent, width } = getLineMeasures(txt)
-    gCtx.fillText(txt, x, y)
-    // setRectToTxt(x, y, fontAscent, fontDecent, width)
-  })
 }
 
 function setEvents() {
