@@ -46,7 +46,7 @@ function onMouseEvent(ev) {
   if (ev?.target?.nodeName === 'INPUT') return
   if (
     ev.type === 'mousemove' &&
-    ev.clientX > state.width - 50 &&
+    ev.clientX > state.width - 100 &&
     ev.clientY < 100
   ) {
     console.log('leave')
@@ -96,7 +96,7 @@ function onInputEvent(ev) {
 function createMouseEvent(ev) {
   return {
     target: ev.target,
-    timeStamp: ev.timeStamp,
+    timeStamp: Date.now(),
     clientX: ev.clientX,
     clientY: ev.clientY,
   }

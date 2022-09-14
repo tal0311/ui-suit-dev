@@ -9,7 +9,7 @@ function init() {
   gElCanvas = document.querySelector('canvas')
 
   gCtx = gElCanvas.getContext('2d')
-  // setEvents()
+  setEvents()
   // renderGrid()
   state = canvasService.getState()
   console.log('state:', state)
@@ -51,9 +51,10 @@ function renderLines() {
 
 function setEvents() {
   const elTxt = document.querySelector('[name=txt]')
-  elTxt.addEventListener('input', onTextChange)
-  gElCanvas.addEventListener('click', onCanvasClick)
-  gElCanvas.addEventListener('contextmenu', onCanvasClick)
+  // elTxt.addEventListener('input', onTextChange)
+  // gElCanvas.addEventListener('click', onCanvasClick)
+  // gElCanvas.addEventListener('contextmenu', onCanvasClick)
+  gElCanvas.addEventListener('mousemove', mouseOverCanvas)
 }
 
 function getLineMeasures(txt) {
@@ -93,7 +94,7 @@ function renderMouseEvents() {
     events.forEach((event) => {
       console.log(event)
       const { clientX, clientY } = event
-      renderLabel(event)
+      renderLabel(null, event)
       gCtx.beginPath()
       gCtx.strokeStyle = color
       gCtx.arc(clientX, clientY, 5, 0, 2 * Math.PI)
@@ -103,14 +104,19 @@ function renderMouseEvents() {
   }
 }
 
-function renderLabel({ target, timeStamp, clientX, clientY }) {
+function mouseOverCanvas(ev) {
+  console.log('ok')
+  console.log(ev.offsetX, ev.offsetY)
+}
+
+function renderLabel(ev = null, { target, timeStamp, clientX, clientY }) {
   console.log(target, timeStamp, clientX, clientY)
   gCtx.beginPath()
   gCtx.font = '10px ariel'
   gCtx.textAlign = 'center'
-  gCtx.fillStyle = '#c0c0c0'
+  gCtx.fillStyle = 'black'
   gCtx.fillText(
-    `${target} ${new Date(timeStamp).toLocaleTimeString()}`,
+    `${target} ${new Date(timeStamp).toLocaleDateString()}`,
     clientX,
     clientY - 20
   )
