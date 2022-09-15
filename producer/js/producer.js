@@ -6,6 +6,7 @@ var gElCanvas
 var gCtx
 var state
 function init() {
+  createCanvas()
   gElCanvas = document.querySelector('canvas')
 
   gCtx = gElCanvas.getContext('2d')
@@ -16,16 +17,19 @@ function init() {
 
   renderSate()
 }
-function onTextChange({ target }) {
-  canvasService.setTxt(target.value)
-  // renderLine()
-}
 
+// render events on canvas
 function renderSate() {
   renderLines()
   renderInputEvents()
   renderMouseEvents()
   renderGrid()
+}
+
+function createCanvas() {
+  var elBody = document.querySelector('body')
+  elBody.innerHTML = `<canvas class="doc" 
+  height="${state.height}" width="${state.width}"></canvas>`
 }
 
 function renderLines() {
@@ -71,6 +75,7 @@ function getLineMeasures(txt) {
   }
 }
 
+// render input events
 function renderInputEvents() {
   const { userInputActions } = state
   const props = userInputActions
@@ -84,6 +89,7 @@ function renderInputEvents() {
   }
 }
 
+// renderEvents to canvas
 function renderMouseEvents() {
   const { userMouseActions } = state
   for (const event in userMouseActions) {
@@ -109,6 +115,9 @@ function mouseOverCanvas(ev) {
   console.log(ev.offsetX, ev.offsetY)
 }
 
+// on mouse over
+function getPos() {}
+function highlightEvent() {}
 function renderLabel(ev = null, { target, timeStamp, clientX, clientY }) {
   console.log(target, timeStamp, clientX, clientY)
   gCtx.beginPath()
@@ -131,28 +140,14 @@ function setColor(event) {
   }
   return colorOpt[event] || colorOpt.default
 }
-function onCanvasClick(ev) {
-  const { offsetX, offsetY } = ev
-  console.log(offsetX, offsetY)
-  const { rightClickColor, leftClickColor } = canvasService.getClickProps()
-  gCtx.strokeStyle = leftClickColor
-  if (ev.type === 'contextmenu') {
-    ev.preventDefault()
-    gCtx.strokeStyle = rightClickColor
-  }
-  gCtx.beginPath()
-  gCtx.arc(offsetX, offsetY, 5, 0, 2 * Math.PI)
-  gCtx.stroke()
-}
-function setRectToTxt(x, y, fontAscent, fontDecent, width) {
-  const line = canvasService.getTextForDisplay()
 
+function setRectToTxt(x, y, fontAscent, fontDecent, width) {
   gCtx.beginPath()
   gCtx.strokeStyle = '#8edb7873'
   gCtx.strokeRect(x, y, width, fontAscent + fontDecent)
   gCtx.closePath()
 }
-function clearTxt() {
+function clearCanvas() {
   gCtx.clearRect(0, 0, gElCanvas.width, gElCanvas.height)
 }
 

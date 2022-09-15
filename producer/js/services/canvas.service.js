@@ -1,5 +1,4 @@
 var model = {
-  lines: [],
   pointerMarker: {
     rightClickColor: '#8edb7873',
     leftClickColor: '#f7a8a8',

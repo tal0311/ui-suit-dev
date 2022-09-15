@@ -4,10 +4,10 @@ var state
 
 var mouseEventList = ['click', 'resize', 'scroll', 'mousemove', 'contextmenu']
 var inputEventList = ['input', 'change', 'blur', 'focus', 'onsearch']
-onInit()
-function onInit() {
+
+function initProvider() {
   state = getState()
-  createCanvas()
+
   addEvents(mouseEventList)
   console.log('state:', state)
 }
@@ -21,13 +21,8 @@ function getState() {
     qParams: window.location.search,
     userMouseActions: {},
     userInputActions: {},
+    title: document.title,
   }
-}
-
-function createCanvas() {
-  var canvasContainer = document.querySelector('#canvas-container')
-  canvasContainer.innerHTML = `<canvas class="doc" 
-  height="${state.height}" width="${state.width}"></canvas>`
 }
 
 function addEvents() {
@@ -49,7 +44,6 @@ function onMouseEvent(ev) {
     ev.clientX > state.width - 100 &&
     ev.clientY < 100
   ) {
-    console.log('leave')
     _setEventToState(ev, 'leave')
     return
   }
